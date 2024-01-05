@@ -8,6 +8,8 @@ type DeleteTaskEvent struct{
   ID string
 }
 
-type EditTaskEvent struct{}
+type EditTaskEvent struct{
+  ID string
+}
 
 type GetTaskListEvent struct{}

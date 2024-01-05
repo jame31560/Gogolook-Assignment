@@ -75,4 +75,35 @@ func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 }
 
 func (s *taskHttpHandler) EditTask(ctx *middle.Context) {
+	badRequestStatus := status.DeleteError.WithHttpCode(http.StatusBadRequest).WithMsg("Request format incorect")
+
+	req := &EditTaskReq{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ctx.ErrorRes(badRequestStatus)
+		return
+	}
+
+	ID, ok := ctx.Params.Get("task_id")
+	if !ok || ID == "" {
+		ctx.ErrorRes(badRequestStatus)
+		return
+	}
+	req.ID = ID
+
+	cmd := &task_usecase.EditTaskCmd{
+		ID:     req.ID,
+		Name:   req.Name,
+		Status: req.Status,
+	}
+
+	event, err := s.taskUsecase.EditTask(ctx, cmd)
+	if err != nil {
+		ctx.ErrorRes(err)
+	}
+
+	res := &EditTaskRes{
+		ID: event.ID,
+	}
+
+	ctx.Response(status.CreateSuccess, res)
 }

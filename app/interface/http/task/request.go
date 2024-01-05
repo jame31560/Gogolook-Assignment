@@ -5,7 +5,7 @@ type CreateTaskReq struct {
 }
 
 type EditTaskReq struct {
-	ID     string `json:"id"`
+	ID     string
 	Name   string `json:"name"`
 	Status int8   `json:"status"`
 }
