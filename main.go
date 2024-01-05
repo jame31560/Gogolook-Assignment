@@ -1,6 +1,7 @@
 package main
 
 import (
+	task_service "task/app/domain/service/task"
 	task_repo "task/app/infra/database/in_memory/task"
 	http_service "task/app/interface/http"
 	"task/app/interface/http/middle"
@@ -10,6 +11,9 @@ import (
 
 func main() {
 	taskRepo := task_repo.NewTaskRepo()
+
+  taskService := task_service.NewTaskService()
+
 
 	taskUsecase := task_usecase.NewTaskUsecase(taskRepo)
 
