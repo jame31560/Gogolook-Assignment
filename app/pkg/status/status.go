@@ -57,5 +57,7 @@ var (
 	ErrorStatus         = NewStatus("Error")
 	CreateError         = NewStatus("Create Error")
 	DeleteError         = NewStatus("Delete Error")
+	QueryError          = NewStatus("Query Error")
+	UpdateError         = NewStatus("Update Error")
 	InternalServerError = NewStatus("Unknown Error").WithHttpCode(http.StatusInternalServerError)
 )

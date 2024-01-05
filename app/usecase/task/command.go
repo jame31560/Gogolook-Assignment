@@ -1,7 +1,7 @@
 package task
 
 type CreateTaskCmd struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type DeleteTaskCmd struct {
@@ -10,8 +10,12 @@ type DeleteTaskCmd struct {
 
 type EditTaskCmd struct {
 	ID     string
-	Name   string
-	Status int8
+	Name   string `json:"name"`
+	Status int8   `json:"status"`
 }
 
-type GetTaskListCmd struct{}
+type GetTaskListCmd struct {
+	ID     string
+	Name   string
+	Status []int8
+}
