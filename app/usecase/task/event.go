@@ -4,7 +4,9 @@ type CreateTaskEvent struct {
 	ID string
 }
 
-type DeleteTaskEvent struct{}
+type DeleteTaskEvent struct{
+  ID string
+}
 
 type EditTaskEvent struct{}
 

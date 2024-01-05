@@ -4,7 +4,9 @@ type CreateTaskCmd struct {
 	Name string
 }
 
-type DeleteTaskCmd struct{}
+type DeleteTaskCmd struct {
+	ID string
+}
 
 type EditTaskCmd struct{}
 

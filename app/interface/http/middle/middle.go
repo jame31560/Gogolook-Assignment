@@ -38,7 +38,7 @@ func (c *Context) Response(status status.Status, data interface{}) {
 	c.JSON(status.HttpCode(), data)
 }
 
-func (c *Context) Error(err error) {
+func (c *Context) ErrorRes(err error) {
   errStatus, ok := err.(status.Status)
   if !ok {
     errStatus = status.InternalServerError

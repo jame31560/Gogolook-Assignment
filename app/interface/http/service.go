@@ -26,7 +26,7 @@ func NewHttpService(
 	apiGroup := app.Group("/api")
 	{
 		apiGroup.POST("/tasks", middleware.HandleFunc(taskHttpHandler.CreateTask))
-		apiGroup.DELETE("/tasks", middleware.HandleFunc(taskHttpHandler.DeleteTask))
+    apiGroup.DELETE("/tasks/:task_id", middleware.HandleFunc(taskHttpHandler.DeleteTask))
 		apiGroup.GET("/tasks", middleware.HandleFunc(taskHttpHandler.GetTaskList))
 		apiGroup.PUT("/tasks", middleware.HandleFunc(taskHttpHandler.EditTask))
 	}

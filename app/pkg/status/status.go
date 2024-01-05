@@ -56,5 +56,6 @@ var (
 	CreateSuccess       = NewStatus("Created Success").WithHttpCode(http.StatusCreated)
 	ErrorStatus         = NewStatus("Error")
 	CreateError         = NewStatus("Create Error")
+	DeleteError         = NewStatus("Delete Error")
 	InternalServerError = NewStatus("Unknown Error").WithHttpCode(http.StatusInternalServerError)
 )
