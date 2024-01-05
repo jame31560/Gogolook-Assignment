@@ -1,6 +1,8 @@
 package task
 
-type CreateTaskEvent struct{}
+type CreateTaskEvent struct {
+	ID string
+}
 
 type DeleteTaskEvent struct{}
 

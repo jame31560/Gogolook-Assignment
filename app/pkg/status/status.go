@@ -52,7 +52,8 @@ func NewStatus(title string) Status {
 }
 
 var (
-	SuccessStatus       = NewStatus("Success")
+	GeneralSuccess      = NewStatus("Success").WithHttpCode(http.StatusOK)
+	CreateSuccess       = NewStatus("Created Success").WithHttpCode(http.StatusCreated)
 	ErrorStatus         = NewStatus("Error")
 	CreateError         = NewStatus("Create Error")
 	InternalServerError = NewStatus("Unknown Error").WithHttpCode(http.StatusInternalServerError)

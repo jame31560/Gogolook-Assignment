@@ -1,6 +1,8 @@
 package task
 
-type CreateTaskCmd struct{}
+type CreateTaskCmd struct {
+	Name string
+}
 
 type DeleteTaskCmd struct{}
 
