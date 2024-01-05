@@ -28,9 +28,19 @@ func (repo *taskRepo) CreateTask(task *aggregate.Task) error {
 
 func (repo *taskRepo) GetTaskByID(ID string) (*aggregate.Task, error) {
 	for _, task := range repo.taskList {
-    if task.ID == ID {
-      return task, nil
-    }
+		if task.ID == ID {
+			return task, nil
+		}
 	}
-  return nil, status.QueryError.WithHttpCode(http.StatusNotFound).WithMsg("Task not found")
+	return nil, status.QueryError.WithHttpCode(http.StatusNotFound).WithMsg("Task not found")
+}
+
+func (repo *taskRepo) DeleteTask(ID string) error {
+	for idx, task := range repo.taskList {
+		if task.ID == ID {
+			repo.taskList = append(repo.taskList[:idx], repo.taskList[idx+1:]...)
+			return nil
+		}
+	}
+	return status.DeleteError.WithHttpCode(http.StatusNotFound).WithMsg("Task not found")
 }

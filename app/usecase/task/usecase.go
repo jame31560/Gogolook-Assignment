@@ -38,7 +38,9 @@ func (usecase *taskUsecase) CreateTask(
 		return nil, err
 	}
 
-	event := new(CreateTaskEvent)
+	event := &CreateTaskEvent{
+    ID: task.ID,
+  }
 	return event, nil
 }
 
@@ -46,7 +48,14 @@ func (usecase *taskUsecase) DeleteTask(
 	ctx context.Context,
 	cmd *DeleteTaskCmd,
 ) (*DeleteTaskEvent, error) {
-	event := new(DeleteTaskEvent)
+  err := usecase.taskRepo.DeleteTask(cmd.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	event := &DeleteTaskEvent{
+    cmd.ID,
+  }
 	return event, nil
 }
 
