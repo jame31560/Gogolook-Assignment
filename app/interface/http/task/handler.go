@@ -19,6 +19,15 @@ func NewTaskHttpHandler(
 	}
 }
 
+// @Summary	Create a task
+// @Schemes
+// @Description	Create a task.
+// @Param	data body task_usecase.CreateTaskCmd true "Create Task"
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Success	201	{object} task_usecase.CreateTaskEvent
+// @Router /tasks [post]
 func (s *taskHttpHandler) CreateTask(ctx *middle.Context) {
 	cmd := &task_usecase.CreateTaskCmd{}
 	if err := ctx.ShouldBindJSON(cmd); err != nil {
@@ -30,6 +39,7 @@ func (s *taskHttpHandler) CreateTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.CreateTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
+    return
 	}
 
 	ctx.Response(status.CreateSuccess, event)
@@ -50,6 +60,7 @@ func (s *taskHttpHandler) DeleteTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.DeleteTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
+    return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)
@@ -65,6 +76,7 @@ func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 	event, err := s.taskUsecase.GetTaskList(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
+    return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)
@@ -89,6 +101,7 @@ func (s *taskHttpHandler) EditTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.EditTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
+    return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)

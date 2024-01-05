@@ -14,6 +14,7 @@ type HttpService struct {
 	App *gin.Engine
 }
 
+// @BasePath /api/tasks
 func NewHttpService(
 	middleware middle.Handler,
 	taskHttpHandler task_http_handler.TaskHttpHandlerInterface,
@@ -26,7 +27,7 @@ func NewHttpService(
 	apiGroup := app.Group("/api")
 	{
 		apiGroup.POST("/tasks", middleware.HandleFunc(taskHttpHandler.CreateTask))
-    apiGroup.DELETE("/tasks/:task_id", middleware.HandleFunc(taskHttpHandler.DeleteTask))
+		apiGroup.DELETE("/tasks/:task_id", middleware.HandleFunc(taskHttpHandler.DeleteTask))
 		apiGroup.GET("/tasks", middleware.HandleFunc(taskHttpHandler.GetTaskList))
 		apiGroup.PUT("/tasks/:task_id", middleware.HandleFunc(taskHttpHandler.EditTask))
 	}

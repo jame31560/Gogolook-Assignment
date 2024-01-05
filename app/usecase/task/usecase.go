@@ -2,10 +2,12 @@ package task
 
 import (
 	"context"
+	"net/http"
 	aggregate "task/app/domain/model/aggreate"
 	"task/app/domain/repository"
 	task_service "task/app/domain/service/task"
 	"task/app/infra/enum"
+	"task/app/pkg/status"
 )
 
 type taskUsecase struct {
@@ -30,8 +32,12 @@ func (usecase *taskUsecase) CreateTask(
 	task := new(aggregate.Task)
 
 	task.Name = cmd.Name
+	if ok := usecase.taskService.CheckName(task.Name); !ok {
+		return nil, status.CreateError.WithHttpCode(http.StatusBadRequest).WithMsg("Name is required.")
+	}
+
 	task.Status = enum.TaskStatusIncomplete
-  task.ID = usecase.taskService.NewTaskID()
+	task.ID = usecase.taskService.NewTaskID()
 
 	err := usecase.taskRepo.CreateTask(task)
 	if err != nil {
@@ -39,8 +45,8 @@ func (usecase *taskUsecase) CreateTask(
 	}
 
 	event := &CreateTaskEvent{
-    ID: task.ID,
-  }
+		ID: task.ID,
+	}
 	return event, nil
 }
 
@@ -48,14 +54,14 @@ func (usecase *taskUsecase) DeleteTask(
 	ctx context.Context,
 	cmd *DeleteTaskCmd,
 ) (*DeleteTaskEvent, error) {
-  err := usecase.taskRepo.DeleteTask(cmd.ID)
+	err := usecase.taskRepo.DeleteTask(cmd.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	event := &DeleteTaskEvent{
-    cmd.ID,
-  }
+		cmd.ID,
+	}
 	return event, nil
 }
 

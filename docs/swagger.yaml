@@ -1,4 +1,37 @@
+definitions:
+  task.CreateTaskCmd:
+    properties:
+      name:
+        type: string
+    type: object
+  task.CreateTaskEvent:
+    properties:
+      id:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /tasks:
+    post:
+      consumes:
+      - application/json
+      description: Create a task.
+      parameters:
+      - description: Create Task
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/task.CreateTaskCmd'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/task.CreateTaskEvent'
+      summary: Create a task
+      tags:
+      - Task
 swagger: "2.0"

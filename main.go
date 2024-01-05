@@ -14,8 +14,7 @@ func main() {
 
   taskService := task_service.NewTaskService()
 
-
-	taskUsecase := task_usecase.NewTaskUsecase(taskRepo)
+	taskUsecase := task_usecase.NewTaskUsecase(taskRepo, taskService)
 
 	taskHttpHandler := task_http_handler.NewTaskHttpHandler(taskUsecase)
 
