@@ -1,6 +1,7 @@
 package http_service
 
 import (
+	"task/app/interface/http/middle"
 	task_http_handler "task/app/interface/http/task"
 	"task/docs"
 
@@ -14,6 +15,7 @@ type HttpService struct {
 }
 
 func NewHttpService(
+	middleware middle.Handler,
 	taskHttpHandler task_http_handler.TaskHttpHandlerInterface,
 ) *HttpService {
 	app := gin.Default()
@@ -23,10 +25,10 @@ func NewHttpService(
 
 	apiGroup := app.Group("/api")
 	{
-		apiGroup.POST("/tasks", taskHttpHandler.CreateTask)
-		apiGroup.DELETE("/tasks", taskHttpHandler.DeleteTask)
-		apiGroup.GET("/tasks", taskHttpHandler.GetTaskList)
-		apiGroup.PUT("/tasks", taskHttpHandler.EditTask)
+		apiGroup.POST("/tasks", middleware.HandleFunc(taskHttpHandler.CreateTask))
+		apiGroup.DELETE("/tasks", middleware.HandleFunc(taskHttpHandler.DeleteTask))
+		apiGroup.GET("/tasks", middleware.HandleFunc(taskHttpHandler.GetTaskList))
+		apiGroup.PUT("/tasks", middleware.HandleFunc(taskHttpHandler.EditTask))
 	}
 
 	return &HttpService{

@@ -3,6 +3,7 @@ package main
 import (
 	task_repo "task/app/infra/database/in_memory/task"
 	http_service "task/app/interface/http"
+	"task/app/interface/http/middle"
 	task_http_handler "task/app/interface/http/task"
 	task_usecase "task/app/usecase/task"
 )
@@ -14,7 +15,9 @@ func main() {
 
 	taskHttpHandler := task_http_handler.NewTaskHttpHandler(taskUsecase)
 
-	app := http_service.NewHttpService(taskHttpHandler)
+  middleware := middle.NewMiddleware()
+
+	app := http_service.NewHttpService(middleware, taskHttpHandler)
 
 	app.App.Run(":8080")
 }

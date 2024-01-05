@@ -1,10 +1,10 @@
 package task
 
-import "github.com/gin-gonic/gin"
+import "task/app/interface/http/middle"
 
 type TaskHttpHandlerInterface interface {
-  CreateTask(*gin.Context)
-  DeleteTask(*gin.Context)
-  GetTaskList(*gin.Context)
-  EditTask(*gin.Context)
+	CreateTask(*middle.Context)
+	DeleteTask(*middle.Context)
+	GetTaskList(*middle.Context)
+	EditTask(*middle.Context)
 }
