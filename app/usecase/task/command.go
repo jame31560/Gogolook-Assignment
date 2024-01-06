@@ -9,7 +9,7 @@ type DeleteTaskCmd struct {
 }
 
 type EditTaskCmd struct {
-	ID     string
+  ID     string `json:"-"`
 	Name   string `json:"name"`
 	Status int8   `json:"status"`
 }

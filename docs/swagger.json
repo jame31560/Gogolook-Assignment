@@ -5,6 +5,57 @@
     },
     "paths": {
         "/tasks": {
+            "get": {
+                "description": "Get tasks.\nTheree has two mod.\n- ID: if use ID, other field will be ignore, and only full match ID's task will be response.\n- Search: if ID is empty, will search by other field.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get task List",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                1,
+                                2
+                            ],
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "status enums",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/task.GetTaskListEvent"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a task.",
                 "consumes": [
@@ -37,6 +88,77 @@
                     }
                 }
             }
+        },
+        "/tasks/{task_id}": {
+            "put": {
+                "description": "Edit tasks.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Edit task List",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Edit Task",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/task.EditTaskCmd"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/task.EditTaskEvent"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a task.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Delete a task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/task.DeleteTaskEvent"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -55,6 +177,36 @@
                     "type": "string"
                 }
             }
+        },
+        "task.DeleteTaskEvent": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.EditTaskCmd": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "task.EditTaskEvent": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.GetTaskListEvent": {
+            "type": "object"
         }
     }
 }

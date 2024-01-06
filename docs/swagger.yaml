@@ -9,10 +9,68 @@ definitions:
       id:
         type: string
     type: object
+  task.DeleteTaskEvent:
+    properties:
+      id:
+        type: string
+    type: object
+  task.EditTaskCmd:
+    properties:
+      name:
+        type: string
+      status:
+        type: integer
+    type: object
+  task.EditTaskEvent:
+    properties:
+      id:
+        type: string
+    type: object
+  task.GetTaskListEvent:
+    type: object
 info:
   contact: {}
 paths:
   /tasks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Get tasks.
+        Theree has two mod.
+        - ID: if use ID, other field will be ignore, and only full match ID's task will be response.
+        - Search: if ID is empty, will search by other field.
+      parameters:
+      - description: id
+        example: string
+        in: query
+        name: id
+        type: string
+      - description: name
+        example: string
+        in: query
+        name: name
+        type: string
+      - collectionFormat: csv
+        description: status enums
+        in: query
+        items:
+          enum:
+          - 1
+          - 2
+          type: integer
+        name: status
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.GetTaskListEvent'
+      summary: Get task List
+      tags:
+      - Task
     post:
       consumes:
       - application/json
@@ -32,6 +90,53 @@ paths:
           schema:
             $ref: '#/definitions/task.CreateTaskEvent'
       summary: Create a task
+      tags:
+      - Task
+  /tasks/{task_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a task.
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.DeleteTaskEvent'
+      summary: Delete a task
+      tags:
+      - Task
+    put:
+      consumes:
+      - application/json
+      description: Edit tasks.
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      - description: Edit Task
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/task.EditTaskCmd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.EditTaskEvent'
+      summary: Edit task List
       tags:
       - Task
 swagger: "2.0"

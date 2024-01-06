@@ -39,12 +39,21 @@ func (s *taskHttpHandler) CreateTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.CreateTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
-    return
+		return
 	}
 
 	ctx.Response(status.CreateSuccess, event)
 }
 
+// @Summary	Delete a task
+// @Schemes
+// @Description	Delete a task.
+// @Param task_id path string true "Task ID"
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Success	200 {object} task_usecase.DeleteTaskEvent
+// @Router /tasks/{task_id} [delete]
 func (s *taskHttpHandler) DeleteTask(ctx *middle.Context) {
 	ID, ok := ctx.Params.Get("task_id")
 	if !ok || ID == "" {
@@ -60,12 +69,26 @@ func (s *taskHttpHandler) DeleteTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.DeleteTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
-    return
+		return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)
 }
 
+// @Summary	Get task List
+// @Schemes
+// @Description	Get tasks.
+// @Description	Theree has two mod.
+// @Description	- ID: if use ID, other field will be ignore, and only full match ID's task will be response.
+// @Description	- Search: if ID is empty, will search by other field.
+// @Param id query string false "id" example(string)
+// @Param name query string false "name" example(string)
+// @Param status query []int false "status enums" Enums(1, 2)
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Success	200	{object} task_usecase.GetTaskListEvent
+// @Router /tasks [get]
 func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 	cmd := &task_usecase.GetTaskListCmd{}
 	if err := ctx.BindQuery(cmd); err != nil {
@@ -76,12 +99,22 @@ func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 	event, err := s.taskUsecase.GetTaskList(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
-    return
+		return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)
 }
 
+// @Summary	Edit task List
+// @Schemes
+// @Description	Edit tasks.
+// @Param task_id path string true "Task ID"
+// @Param	data body task_usecase.EditTaskCmd true "Edit Task"
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Success	200	{object} task_usecase.EditTaskEvent
+// @Router /tasks/{task_id} [put]
 func (s *taskHttpHandler) EditTask(ctx *middle.Context) {
 	badRequestStatus := status.UpdateError.WithHttpCode(http.StatusBadRequest).WithMsg("Request format incorect")
 
@@ -101,7 +134,7 @@ func (s *taskHttpHandler) EditTask(ctx *middle.Context) {
 	event, err := s.taskUsecase.EditTask(ctx, cmd)
 	if err != nil {
 		ctx.ErrorRes(err)
-    return
+		return
 	}
 
 	ctx.Response(status.GeneralSuccess, event)
