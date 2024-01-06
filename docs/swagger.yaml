@@ -27,6 +27,20 @@ definitions:
         type: string
     type: object
   task.GetTaskListEvent:
+    properties:
+      task_list:
+        items:
+          $ref: '#/definitions/task.TaskDto'
+        type: array
+    type: object
+  task.TaskDto:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
     type: object
 info:
   contact: {}

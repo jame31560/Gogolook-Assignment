@@ -15,7 +15,7 @@ type EditTaskCmd struct {
 }
 
 type GetTaskListCmd struct {
-	ID     string
-	Name   string
-	Status []int8
+	ID     string `form:"id"`
+	Name   string `form:"name"`
+	Status []int8 `form:"status"`
 }

@@ -206,7 +206,29 @@
             }
         },
         "task.GetTaskListEvent": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "task_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/task.TaskDto"
+                    }
+                }
+            }
+        },
+        "task.TaskDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
         }
     }
 }

@@ -77,6 +77,22 @@ func (usecase *taskUsecase) GetTaskList(
 	ctx context.Context,
 	cmd *GetTaskListCmd,
 ) (*GetTaskListEvent, error) {
-	event := new(GetTaskListEvent)
+	event := &GetTaskListEvent{
+		TaskList: make([]*TaskDto, 0),
+	}
+
+	if cmd.ID != "" {
+		task, err := usecase.taskRepo.GetTaskByID(cmd.ID)
+		if err != nil {
+			return nil, err
+		}
+		event.TaskList = []*TaskDto{
+			{
+				ID:     task.ID,
+				Name:   task.Name,
+				Status: int8(task.Status),
+			},
+		}
+	}
 	return event, nil
 }
