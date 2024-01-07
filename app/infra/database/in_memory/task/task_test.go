@@ -111,13 +111,6 @@ func TestUpdateTaskByID(t *testing.T) {
 	assert.EqualValues(t, repo.taskList[0].Status, updatedStatus)
 }
 
-type QueryTaskCase struct {
-	NameParam       string
-	StatusListParam []int8
-	Len             int
-	FirstID         string
-}
-
 func TestQueryTaskList(t *testing.T) {
 	task1 := &aggregate.Task{
 		ID:     "7780fc95-7a0a-45ef-a985-21c3e744c1d7",
@@ -138,26 +131,31 @@ func TestQueryTaskList(t *testing.T) {
 		},
 	}
 
-	caseList := []*QueryTaskCase{
-		{NameParam: "", StatusListParam: []int8{}, Len: 0},
-		{NameParam: "0", StatusListParam: []int8{}, Len: 0},
-		{NameParam: "1", StatusListParam: []int8{}, Len: 0},
-		{NameParam: "", StatusListParam: enum.GetAllTaskStatusIntList(), Len: 2},
-		{NameParam: "0", StatusListParam: enum.GetAllTaskStatusIntList(), Len: 0},
-		{NameParam: "1", StatusListParam: enum.GetAllTaskStatusIntList(), Len: 1, FirstID: task1.ID},
-		{NameParam: "", StatusListParam: []int8{int8(enum.TaskStatusCompleted)}, Len: 1, FirstID: task2.ID},
-		{NameParam: "0", StatusListParam: []int8{int8(enum.TaskStatusCompleted)}, Len: 0},
-		{NameParam: "1", StatusListParam: []int8{int8(enum.TaskStatusCompleted)}, Len: 0},
-		{NameParam: "2", StatusListParam: []int8{int8(enum.TaskStatusCompleted)}, Len: 1, FirstID: task2.ID},
+	caseList := []struct {
+		nameParam       string
+		statusListParam []int8
+		length          int
+		firstID         string
+	}{
+		{nameParam: "", statusListParam: []int8{}, length: 0},
+		{nameParam: "0", statusListParam: []int8{}, length: 0},
+		{nameParam: "1", statusListParam: []int8{}, length: 0},
+		{nameParam: "", statusListParam: enum.GetAllTaskStatusIntList(), length: 2},
+		{nameParam: "0", statusListParam: enum.GetAllTaskStatusIntList(), length: 0},
+		{nameParam: "1", statusListParam: enum.GetAllTaskStatusIntList(), length: 1, firstID: task1.ID},
+		{nameParam: "", statusListParam: []int8{int8(enum.TaskStatusCompleted)}, length: 1, firstID: task2.ID},
+		{nameParam: "0", statusListParam: []int8{int8(enum.TaskStatusCompleted)}, length: 0},
+		{nameParam: "1", statusListParam: []int8{int8(enum.TaskStatusCompleted)}, length: 0},
+		{nameParam: "2", statusListParam: []int8{int8(enum.TaskStatusCompleted)}, length: 1, firstID: task2.ID},
 	}
 
 	for _, testCase := range caseList {
-		result, err := repo.QueryTaskList(testCase.NameParam, testCase.StatusListParam)
+		result, err := repo.QueryTaskList(testCase.nameParam, testCase.statusListParam)
 		assert.NoError(t, err)
-		assert.Len(t, result, testCase.Len)
-		if testCase.Len == 0 || testCase.FirstID == "" {
+		assert.Len(t, result, testCase.length)
+		if testCase.length == 0 || testCase.firstID == "" {
 			continue
 		}
-		assert.EqualValues(t, testCase.FirstID, result[0].ID)
+		assert.EqualValues(t, testCase.firstID, result[0].ID)
 	}
 }
