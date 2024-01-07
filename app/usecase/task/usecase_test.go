@@ -36,7 +36,7 @@ func TestCreateTask(t *testing.T) {
 			expectedEvent: &CreateTaskEvent{
 				ID: "taskID",
 			},
-			hasError:      false,
+			hasError: false,
 		},
 		{
 			name:          "Empty name",
@@ -71,6 +71,57 @@ func TestCreateTask(t *testing.T) {
 			}
 
 			event, err := usecase.CreateTask(context.Background(), testCase.cmd)
+
+			assert.EqualValues(t, testCase.expectedEvent, event)
+			if testCase.hasError {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestDeleteTask(t *testing.T) {
+	repoMock := task_mock.NewTaskRepoMock()
+	svcMock := task_service.NewTaskServiceMock()
+	usecase := &taskUsecase{
+		taskRepo:    repoMock,
+		taskService: svcMock,
+	}
+
+	caseList := []struct {
+		name                 string
+		cmd                  *DeleteTaskCmd
+		mockDeleteRepoHasErr bool
+		expectedEvent        *DeleteTaskEvent
+		hasError             bool
+	}{
+		{
+			name: "Success",
+			cmd:  &DeleteTaskCmd{ID: "taskID"},
+			expectedEvent: &DeleteTaskEvent{
+				ID: "taskID",
+			},
+		},
+		{
+			name:                 "Repository error",
+			cmd:                  &DeleteTaskCmd{ID: "taskID"},
+			mockDeleteRepoHasErr: true,
+			hasError:             true,
+		},
+	}
+
+	for _, testCase := range caseList {
+		t.Run(testCase.name, func(t *testing.T) {
+			repoMock.DeleteTaskFunc = func(ID string) error {
+				if testCase.mockDeleteRepoHasErr {
+					return status.ErrorStatus
+				}
+				return nil
+			}
+
+			event, err := usecase.DeleteTask(context.Background(), testCase.cmd)
 
 			assert.EqualValues(t, testCase.expectedEvent, event)
 			if testCase.hasError {
