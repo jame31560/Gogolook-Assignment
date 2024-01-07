@@ -132,3 +132,74 @@ func TestDeleteTask(t *testing.T) {
 		})
 	}
 }
+
+func TestEditTask(t *testing.T) {
+	repoMock := task_mock.NewTaskRepoMock()
+	svcMock := task_service.NewTaskServiceMock()
+	usecase := &taskUsecase{
+		taskRepo:    repoMock,
+		taskService: svcMock,
+	}
+
+	caseList := []struct {
+		name                 string
+		cmd                  *EditTaskCmd
+		mockCheckName        bool
+		mockUpdateRepoHasErr bool
+		expectedEvent        *EditTaskEvent
+		hasError             bool
+	}{
+		{
+			name:          "Success",
+			cmd:           &EditTaskCmd{ID: "taskID", Name: "NewTask", Status: 1},
+			mockCheckName: true,
+			expectedEvent: &EditTaskEvent{ID: "taskID"},
+			hasError:      false,
+		},
+		{
+			name:          "Empty name",
+			cmd:           &EditTaskCmd{ID: "taskID", Name: "", Status: 1},
+			mockCheckName: false,
+			expectedEvent: nil,
+			hasError:      true,
+		},
+		{
+			name:          "TaskStatus incorrect",
+			cmd:           &EditTaskCmd{ID: "taskID", Name: "NewTask", Status: 99},
+			mockCheckName: true,
+			expectedEvent: nil,
+			hasError:      true,
+		},
+		{
+			name:                 "Repository update error",
+			cmd:                  &EditTaskCmd{ID: "taskID", Name: "NewTask", Status: 1},
+			mockCheckName:        true,
+			mockUpdateRepoHasErr: true,
+			expectedEvent:        nil,
+			hasError:             true,
+		},
+	}
+
+	for _, testCase := range caseList {
+		t.Run(testCase.name, func(t *testing.T) {
+			svcMock.CheckNameFunc = func(name string) bool {
+				return testCase.mockCheckName
+			}
+			repoMock.UpdateTaskByIDFunc = func(ID string, task *aggregate.Task) error {
+				if testCase.mockUpdateRepoHasErr {
+					return status.ErrorStatus
+				}
+				return nil
+			}
+
+			event, err := usecase.EditTask(context.Background(), testCase.cmd)
+
+			assert.EqualValues(t, testCase.expectedEvent, event)
+			if testCase.hasError {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+		})
+	}
+}
