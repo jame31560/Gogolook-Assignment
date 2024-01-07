@@ -23,6 +23,7 @@ func NewTaskHttpHandler(
 // @Summary	Create a task
 // @Schemes
 // @Description	Create a task.
+// @Description	The status of new task will be incomplete.
 // @Param	data body task_usecase.CreateTaskCmd true "Create Task"
 // @Tags Task
 // @Accept json
@@ -48,7 +49,7 @@ func (s *taskHttpHandler) CreateTask(ctx *middle.Context) {
 
 // @Summary	Delete a task
 // @Schemes
-// @Description	Delete a task.
+// @Description	Delete a task by task ID.
 // @Param task_id path string true "Task ID"
 // @Tags Task
 // @Accept json
@@ -80,11 +81,14 @@ func (s *taskHttpHandler) DeleteTask(ctx *middle.Context) {
 // @Schemes
 // @Description	Get tasks.
 // @Description	Theree has two mod.
-// @Description	- ID: if use ID, other field will be ignore, and only full match ID's task will be response.
-// @Description	- Search: if ID is empty, will search by other field.
-// @Param id query string false "id" example(string)
-// @Param name query string false "name" example(string)
-// @Param status query []int false "status enums" Enums(1, 2)
+// @Description	- ID:
+// @Description if use ID, other field will be ignore, and only full match ID's task will be response. If don't match there will return error.
+// @Description	- Search:
+// @Description It will use search mod if ID is empty.
+// @Description The task witch name contain the request name and status in the request statusList will be return. 
+// @Param id query string false "Search task by ID." example(string)
+// @Param name query string false "string to search task name" example(string)
+// @Param status query []int false "status you want to find, keep empty to get all status task." Enums(1, 2)
 // @Tags Task
 // @Accept json
 // @Produce json

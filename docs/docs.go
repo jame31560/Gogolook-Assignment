@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/tasks": {
             "get": {
-                "description": "Get tasks.\nTheree has two mod.\n- ID: if use ID, other field will be ignore, and only full match ID's task will be response.\n- Search: if ID is empty, will search by other field.",
+                "description": "Get tasks.\nTheree has two mod.\n- ID:\nif use ID, other field will be ignore, and only full match ID's task will be response. If don't match there will return error.\n- Search:\nIt will use search mod if ID is empty.\nThe task witch name contain the request name and status in the request statusList will be return.",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,14 +32,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "string",
-                        "description": "id",
+                        "description": "Search task by ID.",
                         "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "example": "string",
-                        "description": "name",
+                        "description": "string to search task name",
                         "name": "name",
                         "in": "query"
                     },
@@ -53,7 +53,7 @@ const docTemplate = `{
                             "type": "integer"
                         },
                         "collectionFormat": "csv",
-                        "description": "status enums",
+                        "description": "status you want to find, keep empty to get all status task.",
                         "name": "status",
                         "in": "query"
                     }
@@ -68,7 +68,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a task.",
+                "description": "Create a task.\nThe status of new task will be incomplete.",
                 "consumes": [
                     "application/json"
                 ],
@@ -141,7 +141,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a task.",
+                "description": "Delete a task by task ID.",
                 "consumes": [
                     "application/json"
                 ],

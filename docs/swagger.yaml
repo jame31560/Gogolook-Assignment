@@ -56,21 +56,24 @@ paths:
       description: |-
         Get tasks.
         Theree has two mod.
-        - ID: if use ID, other field will be ignore, and only full match ID's task will be response.
-        - Search: if ID is empty, will search by other field.
+        - ID:
+        if use ID, other field will be ignore, and only full match ID's task will be response. If don't match there will return error.
+        - Search:
+        It will use search mod if ID is empty.
+        The task witch name contain the request name and status in the request statusList will be return.
       parameters:
-      - description: id
+      - description: Search task by ID.
         example: string
         in: query
         name: id
         type: string
-      - description: name
+      - description: string to search task name
         example: string
         in: query
         name: name
         type: string
       - collectionFormat: csv
-        description: status enums
+        description: status you want to find, keep empty to get all status task.
         in: query
         items:
           enum:
@@ -92,7 +95,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a task.
+      description: |-
+        Create a task.
+        The status of new task will be incomplete.
       parameters:
       - description: Create Task
         in: body
@@ -114,7 +119,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Delete a task.
+      description: Delete a task by task ID.
       parameters:
       - description: Task ID
         in: path
