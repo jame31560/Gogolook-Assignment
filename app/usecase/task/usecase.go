@@ -93,6 +93,23 @@ func (usecase *taskUsecase) GetTaskList(
 				Status: int8(task.Status),
 			},
 		}
+		return event, nil
 	}
+
+	taskList, err := usecase.taskRepo.QueryTaskList(cmd.Name, cmd.Status)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, task := range taskList {
+		event.TaskList = append(event.TaskList, &TaskDto{
+			ID:     task.ID,
+			Name:   task.Name,
+			Status: int8(task.Status),
+      CreateTime: task.CreateTime,
+      UpdateTime: task.UpdateTime,
+		})
+	}
+
 	return event, nil
 }

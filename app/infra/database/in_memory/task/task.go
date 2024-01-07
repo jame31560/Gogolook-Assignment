@@ -2,6 +2,7 @@ package task
 
 import (
 	"net/http"
+	"strings"
 	aggregate "task/app/domain/model/aggreate"
 	"task/app/domain/repository"
 	"task/app/pkg/status"
@@ -43,4 +44,26 @@ func (repo *taskRepo) DeleteTask(ID string) error {
 		}
 	}
 	return status.DeleteError.WithHttpCode(http.StatusNotFound).WithMsg("Task not found")
+}
+
+func (repo *taskRepo) QueryTaskList(name string, statusList []int8) ([]*aggregate.Task, error) {
+	containsStatus := func(status int8) bool {
+		for _, st := range statusList {
+			if status == st {
+				return true
+			}
+		}
+		return false
+	}
+
+	result := make([]*aggregate.Task, 0)
+	for _, task := range repo.taskList {
+		switch false {
+		case name == "" || strings.Contains(task.Name, name):
+		case containsStatus(int8(task.Status)):
+		default:
+			result = append(result, task)
+		}
+	}
+	return result, nil
 }

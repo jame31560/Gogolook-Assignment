@@ -1,5 +1,7 @@
 package task
 
+import "time"
+
 type CreateTaskEvent struct {
 	ID string `json:"id"`
 }
@@ -13,9 +15,11 @@ type EditTaskEvent struct {
 }
 
 type TaskDto struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Status int8   `json:"status"`
+	ID         string    `json:"id"`
+	Name       string    `json:"name"`
+	Status     int8      `json:"status"`
+	UpdateTime time.Time `json:"update_time"`
+	CreateTime time.Time `json:"create_time"`
 }
 
 type GetTaskListEvent struct {

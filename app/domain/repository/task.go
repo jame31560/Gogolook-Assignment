@@ -6,4 +6,5 @@ type TaskRepoInterface interface{
   CreateTask (*aggregate.Task) error
   DeleteTask (string) error
   GetTaskByID (string) (*aggregate.Task, error)
+  QueryTaskList (string, []int8) ([]*aggregate.Task, error)
 }

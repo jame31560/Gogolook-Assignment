@@ -230,6 +230,9 @@ const docTemplate = `{
         "task.TaskDto": {
             "type": "object",
             "properties": {
+                "create_time": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -238,6 +241,9 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                },
+                "update_time": {
+                    "type": "string"
                 }
             }
         }

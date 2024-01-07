@@ -2,6 +2,7 @@ package task
 
 import (
 	"net/http"
+	"task/app/infra/enum"
 	"task/app/interface/http/middle"
 	"task/app/pkg/status"
 	task_usecase "task/app/usecase/task"
@@ -94,6 +95,10 @@ func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 	if err := ctx.BindQuery(cmd); err != nil {
 		ctx.ErrorRes(status.QueryError.WithHttpCode(http.StatusBadRequest).WithMsg("Request format incorect"))
 		return
+	}
+
+	if cmd.Status == nil || len(cmd.Status) == 0 {
+    cmd.Status = enum.GetAllTaskStatusIntList() 
 	}
 
 	event, err := s.taskUsecase.GetTaskList(ctx, cmd)
