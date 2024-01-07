@@ -25,7 +25,7 @@ func TestToTaskStatusEnum(t *testing.T) {
 			assert.Error(t, err)
 		} else {
 			assert.NoError(t, err)
-      assert.EqualValues(t, testCase.expected, result)
+			assert.EqualValues(t, testCase.expected, result)
 		}
 	}
 }
