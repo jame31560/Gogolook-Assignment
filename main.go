@@ -12,13 +12,13 @@ import (
 func main() {
 	taskRepo := task_repo.NewTaskRepo()
 
-  taskService := task_service.NewTaskService()
+	taskService := task_service.NewTaskService()
 
 	taskUsecase := task_usecase.NewTaskUsecase(taskRepo, taskService)
 
 	taskHttpHandler := task_http_handler.NewTaskHttpHandler(taskUsecase)
 
-  middleware := middle.NewMiddleware()
+	middleware := middle.NewMiddleware()
 
 	app := http_service.NewHttpService(middleware, taskHttpHandler)
 
