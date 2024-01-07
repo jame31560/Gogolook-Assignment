@@ -22,12 +22,12 @@ func GetAllTaskStatusIntList() []int8 {
 }
 
 func ToTaskStatusEnum(i int8) (TaskStatusEnum, error) {
-  err := status.ErrorStatus.WithHttpCode(http.StatusBadRequest).WithMsg("Unknown status enum")
+	err := status.ErrorStatus.WithHttpCode(http.StatusBadRequest).WithMsg("Unknown status enum")
 	if i <= int8(TaskStatusNone) {
-    return TaskStatusNone, err
+		return TaskStatusNone, err
 	}
-  if i >= int8(TaskStatusEnd) {
-    return TaskStatusNone, err
+	if i >= int8(TaskStatusEnd) {
+		return TaskStatusNone, err
 	}
-  return TaskStatusEnum(i), nil
+	return TaskStatusEnum(i), nil
 }

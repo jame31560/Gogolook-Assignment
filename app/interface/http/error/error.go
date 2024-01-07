@@ -6,8 +6,8 @@ type ErrRes struct {
 	ErrMsg string `json:"error_message"`
 }
 
-func NewErrRes(st status.Status) ErrRes{
-  return ErrRes{
-    ErrMsg: st.ErrMsg(),
-  }
+func NewErrRes(st status.Status) ErrRes {
+	return ErrRes{
+		ErrMsg: st.ErrMsg(),
+	}
 }

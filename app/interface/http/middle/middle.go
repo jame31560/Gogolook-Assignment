@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 type Context struct {
 	*gin.Context
 }
@@ -24,7 +23,7 @@ type Handler interface {
 }
 
 func (m *middleware) HandleFunc(
-  handler func(*Context),
+	handler func(*Context),
 ) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		customerContext := &Context{
@@ -39,10 +38,10 @@ func (c *Context) Response(status status.Status, data interface{}) {
 }
 
 func (c *Context) ErrorRes(err error) {
-  errStatus, ok := err.(status.Status)
-  if !ok {
-    errStatus = status.InternalServerError
-  }
+	errStatus, ok := err.(status.Status)
+	if !ok {
+		errStatus = status.InternalServerError
+	}
 
 	c.JSON(errStatus.HttpCode(), http_error.NewErrRes(errStatus))
 }

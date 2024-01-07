@@ -6,9 +6,9 @@ import (
 )
 
 type Task struct {
-	ID string
-	Name string
-	Status enum.TaskStatusEnum
+	ID         string
+	Name       string
+	Status     enum.TaskStatusEnum
 	UpdateTime time.Time
 	CreateTime time.Time
 }

@@ -98,7 +98,7 @@ func (s *taskHttpHandler) GetTaskList(ctx *middle.Context) {
 	}
 
 	if cmd.Status == nil || len(cmd.Status) == 0 {
-    cmd.Status = enum.GetAllTaskStatusIntList() 
+		cmd.Status = enum.GetAllTaskStatusIntList()
 	}
 
 	event, err := s.taskUsecase.GetTaskList(ctx, cmd)
