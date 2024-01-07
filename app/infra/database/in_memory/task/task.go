@@ -67,3 +67,16 @@ func (repo *taskRepo) QueryTaskList(name string, statusList []int8) ([]*aggregat
 	}
 	return result, nil
 }
+
+func (repo *taskRepo) UpdateTaskByID(ID string, task *aggregate.Task) error {
+	taskToUpdate, err := repo.GetTaskByID(ID)
+	if err != nil {
+		return err
+	}
+
+	taskToUpdate.Name = task.Name
+	taskToUpdate.Status = task.Status
+	taskToUpdate.UpdateTime = time.Now()
+
+	return nil
+}

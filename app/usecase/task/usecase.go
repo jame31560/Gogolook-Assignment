@@ -69,7 +69,27 @@ func (usecase *taskUsecase) EditTask(
 	ctx context.Context,
 	cmd *EditTaskCmd,
 ) (*EditTaskEvent, error) {
-	event := new(EditTaskEvent)
+	if ok := usecase.taskService.CheckName(cmd.Name); !ok {
+		return nil, status.UpdateError.WithHttpCode(http.StatusBadRequest).WithMsg("Name is required.")
+	}
+	status, err := enum.ToTaskStatusEnum(cmd.Status)
+	if err != nil {
+		return nil, err
+	}
+
+	task := &aggregate.Task{
+		Status: status,
+		Name:   cmd.Name,
+	}
+
+	err = usecase.taskRepo.UpdateTaskByID(cmd.ID, task)
+	if err != nil {
+		return nil, err
+	}
+
+	event := &EditTaskEvent{
+		ID: cmd.ID,
+	}
 	return event, nil
 }
 
@@ -103,11 +123,11 @@ func (usecase *taskUsecase) GetTaskList(
 
 	for _, task := range taskList {
 		event.TaskList = append(event.TaskList, &TaskDto{
-			ID:     task.ID,
-			Name:   task.Name,
-			Status: int8(task.Status),
-      CreateTime: task.CreateTime,
-      UpdateTime: task.UpdateTime,
+			ID:         task.ID,
+			Name:       task.Name,
+			Status:     int8(task.Status),
+			CreateTime: task.CreateTime,
+			UpdateTime: task.UpdateTime,
 		})
 	}
 
