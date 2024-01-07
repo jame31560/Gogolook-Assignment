@@ -3,7 +3,7 @@ package task
 import (
 	"context"
 	"net/http"
-	aggregate "task/app/domain/model/aggreate"
+	"task/app/domain/model/aggregate"
 	"task/app/domain/repository"
 	task_service "task/app/domain/service/task"
 	"task/app/infra/enum"

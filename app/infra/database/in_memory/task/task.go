@@ -3,7 +3,7 @@ package task
 import (
 	"net/http"
 	"strings"
-	aggregate "task/app/domain/model/aggreate"
+	"task/app/domain/model/aggregate"
 	"task/app/domain/repository"
 	"task/app/pkg/status"
 	"time"

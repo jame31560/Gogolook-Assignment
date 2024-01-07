@@ -1,7 +1,7 @@
 package task
 
 import (
-	"task/app/domain/model/aggreate"
+	"task/app/domain/model/aggregate"
 	"task/app/infra/enum"
 	"testing"
 

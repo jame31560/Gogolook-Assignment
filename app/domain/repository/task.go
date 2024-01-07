@@ -1,6 +1,6 @@
 package repository
 
-import aggregate "task/app/domain/model/aggreate"
+import "task/app/domain/model/aggregate"
 
 type TaskRepoInterface interface {
 	CreateTask(*aggregate.Task) error

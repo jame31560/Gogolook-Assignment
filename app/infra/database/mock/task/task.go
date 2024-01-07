@@ -1,7 +1,7 @@
 package task_mock
 
 import (
-	aggregate "task/app/domain/model/aggreate"
+	"task/app/domain/model/aggregate"
 	"task/app/infra/enum"
 	"time"
 )

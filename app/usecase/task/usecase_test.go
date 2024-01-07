@@ -2,9 +2,10 @@ package task
 
 import (
 	"context"
-	aggregate "task/app/domain/model/aggreate"
+	"task/app/domain/model/aggregate"
 	task_service "task/app/domain/service/task"
 	task_mock "task/app/infra/database/mock/task"
+	"task/app/infra/enum"
 	"task/app/pkg/status"
 	"testing"
 
@@ -199,6 +200,89 @@ func TestEditTask(t *testing.T) {
 				assert.Error(t, err)
 				return
 			}
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestGetTaskList(t *testing.T) {
+	repoMock := task_mock.NewTaskRepoMock()
+	svcMock := task_service.NewTaskServiceMock()
+	usecase := &taskUsecase{
+		taskRepo:    repoMock,
+		taskService: svcMock,
+	}
+
+	caseList := []struct {
+		name                string
+		cmd                 *GetTaskListCmd
+		mockGetTaskByID     *aggregate.Task
+		mockGetTaskByIDErr  status.Status
+		mockQueryTaskList   []*aggregate.Task
+		mockQueryErr        status.Status
+		expectedTaskListLen int
+		hasError            bool
+	}{
+		{
+			name: "Get by ID - Success",
+			cmd:  &GetTaskListCmd{ID: "taskID"},
+			mockGetTaskByID: &aggregate.Task{
+				ID:     "taskID",
+				Name:   "Task",
+				Status: enum.TaskStatusCompleted,
+			},
+			expectedTaskListLen: 1,
+			hasError:            false,
+		},
+		{
+			name:               "Get by ID - Repository error",
+			cmd:                &GetTaskListCmd{ID: "taskID"},
+			mockGetTaskByIDErr: status.ErrorStatus,
+			hasError:           true,
+		},
+		{
+			name: "Query - Success",
+			cmd:  &GetTaskListCmd{Name: "Task", Status: []int8{int8(enum.TaskStatusIncomplete)}},
+			mockQueryTaskList: []*aggregate.Task{
+				{
+					ID:     "taskID1",
+					Name:   "TaskName1",
+					Status: enum.TaskStatusIncomplete,
+				},
+				{
+					ID:     "taskID2",
+					Name:   "TaskName2",
+					Status: enum.TaskStatusIncomplete,
+				},
+			},
+			expectedTaskListLen: 2,
+			hasError:            false,
+		},
+		{
+			name:                "Query - Repository error",
+			cmd:                 &GetTaskListCmd{Name: "TaskName", Status: []int8{int8(enum.TaskStatusIncomplete)}},
+			mockQueryErr:        status.ErrorStatus,
+			expectedTaskListLen: 0,
+			hasError:            true,
+		},
+	}
+
+	for _, testCase := range caseList {
+		t.Run(testCase.name, func(t *testing.T) {
+			repoMock.GetTaskByIDFunc = func(ID string) (*aggregate.Task, error) {
+				return testCase.mockGetTaskByID, testCase.mockGetTaskByIDErr
+			}
+			repoMock.QueryTaskListFunc = func(name string, statusList []int8) ([]*aggregate.Task, error) {
+				return testCase.mockQueryTaskList, testCase.mockQueryErr
+			}
+
+			event, err := usecase.GetTaskList(context.Background(), testCase.cmd)
+
+			if testCase.hasError {
+				assert.Error(t, err)
+				return
+			}
+			assert.EqualValues(t, testCase.expectedTaskListLen, len(event.TaskList))
 			assert.NoError(t, err)
 		})
 	}
