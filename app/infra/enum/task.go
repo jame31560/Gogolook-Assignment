@@ -8,8 +8,7 @@ import (
 type TaskStatusEnum int8
 
 const (
-	TaskStatusNone TaskStatusEnum = iota
-	TaskStatusIncomplete
+	TaskStatusIncomplete TaskStatusEnum = iota
 	TaskStatusCompleted
 	TaskStatusEnd
 )
@@ -23,11 +22,11 @@ func GetAllTaskStatusIntList() []int8 {
 
 func ToTaskStatusEnum(i int8) (TaskStatusEnum, error) {
 	err := status.ErrorStatus.WithHttpCode(http.StatusBadRequest).WithMsg("Unknown status enum")
-	if i <= int8(TaskStatusNone) {
-		return TaskStatusNone, err
+	if i < 0 {
+		return 0, err
 	}
 	if i >= int8(TaskStatusEnd) {
-		return TaskStatusNone, err
+		return 0, err
 	}
 	return TaskStatusEnum(i), nil
 }

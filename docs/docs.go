@@ -47,8 +47,8 @@ const docTemplate = `{
                         "type": "array",
                         "items": {
                             "enum": [
-                                1,
-                                2
+                                0,
+                                1
                             ],
                             "type": "integer"
                         },

@@ -88,7 +88,7 @@ func (s *taskHttpHandler) DeleteTask(ctx *middle.Context) {
 // @Description The task witch name contain the request name and status in the request statusList will be return. 
 // @Param id query string false "Search task by ID." example(string)
 // @Param name query string false "string to search task name" example(string)
-// @Param status query []int false "status you want to find, keep empty to get all status task." Enums(1, 2)
+// @Param status query []int false "status you want to find, keep empty to get all status task." Enums(0, 1)
 // @Tags Task
 // @Accept json
 // @Produce json

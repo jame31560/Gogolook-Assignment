@@ -77,8 +77,8 @@ paths:
         in: query
         items:
           enum:
+          - 0
           - 1
-          - 2
           type: integer
         name: status
         type: array

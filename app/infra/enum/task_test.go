@@ -12,7 +12,6 @@ func TestToTaskStatusEnum(t *testing.T) {
 		hasErr   bool
 		expected TaskStatusEnum
 	}{
-		{input: int8(TaskStatusNone), hasErr: true},
 		{input: int8(TaskStatusIncomplete), expected: TaskStatusIncomplete},
 		{input: int8(TaskStatusEnd), hasErr: true},
 		{input: -1, hasErr: true},
